@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:13-alpine
+    restart: always
+    volumes: 
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: example
+      POSTGRES_DB: example
+      POSTGRES_PASSWORD: example
+
+  app:
+    build:
+      context: ./
+      dockerfile: dev.dockerfile
+    working_dir: /app
+    ports: 
+        - 8000:8000
+    volumes: 
+      - ./src:/app
+    depends_on: 
+      - postgres
+    command: python manage.py runserver 0.0.0.0:8000
+
+volumes: 
+  postgres: {}

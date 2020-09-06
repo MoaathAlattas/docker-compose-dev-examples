@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes: 
+      - mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_USER=laravel
+      - MYSQL_PASSWORD=laravel
+      - MYSQL_DATABASE=laravel
+
+  app:
+    image: lorisleiva/laravel-docker:7.4
+    depends_on:
+      - mariadb
+    ports:
+      - 8000:8000
+    volumes:
+      - ./src:/var/www
+    command: php artisan serve --host 0.0.0.0
+
+volumes: 
+  mariadb: {}
